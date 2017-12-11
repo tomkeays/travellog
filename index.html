@@ -1,3 +1,4 @@
+
 <!doctype html>
 
 <html lang="en">
@@ -119,11 +120,10 @@
             <div class="image-wrapper" style="background-image: url(images/image-1x1.jpg)"></div>
           </div>
         </div><!-- end grid -->
-
       </section>
 
-      <section id='location-home'>
-        <h3>Home</h3>
+      <section id='location-fayette'>
+        <h3>Fayette</h3>
         <p>But this place was even better.</p>
         <span class="date">Jan 16</span>
 
@@ -138,7 +138,24 @@
             <div class="image-wrapper" style="background-image: url(images/image-1x1.jpg)"></div>
           </div>
         </div><!-- end grid -->
+      </section>
 
+      <section id='location-cumberland'>
+        <h3>Cumberland</h3>
+        <p>Another place to see.</p>
+        <span class="date">Jan 17</span>
+
+        <div class="grid">
+          <div class="box box--2x1">
+            <div class="image-wrapper" style="background-image: url(images/image-2x1.jpg)"></div>
+          </div>
+          <div class="box box--1x1">
+            <div class="image-wrapper" style="background-image: url(images/image-1x1.jpg)"></div>
+          </div>
+          <div class="box box--3x1">
+            <div class="image-wrapper" style="background-image: url(images/image-3x1.jpg)"></div>
+          </div>
+        </div><!-- end grid -->
       </section>
       
       
@@ -166,10 +183,11 @@
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v9',
+      // style: 'mapbox://styles/tomkeays/cjb2ktz14egsz2ss89ospa14u',
       // your starting coordiantes
       center: [-76.104681, 43.048329],
       zoom: 11,
-      bearing: 55,
+      bearing: 0,
       pitch: 70,
       duration: 8000
     });
@@ -181,28 +199,41 @@
 
     var geojson = {
       type: 'FeatureCollection',
-      features: [{
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [-76.090473, 43.048480]
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-76.090473, 43.048480]
+          },
+          properties: {
+            title: 'Library',
+            description: 'Falcone Library'
+          }
         },
-        properties: {
-          title: 'Library',
-          description: 'Falcone Library'
-        }
-      },
-      {
-        type: 'Feature',
-        geometry: {
-          type: 'Point',
-          coordinates: [-76.104681, 43.048329]
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-76.104681, 43.048329]
+          },
+          properties: {
+            title: 'Fayette',
+            description: 'Fayette St'
+          }
         },
-        properties: {
-          title: 'Home',
-          description: 'Fayette St'
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-76.112881, 43.028337]
+          },
+          properties: {
+            title: 'Cumberland',
+            description: 'Cumberland Ave'
+          }
         }
-      }]
+      ]
     };
 
     geojson.features.forEach(function(marker) {
@@ -221,15 +252,29 @@
 
     var chapters = {
       // give each location the same name as its section id, and set its coordinates here
+      'intro': {
+          center: [-76.104681, 43.048329],
+          zoom: 11,
+          bearing: 0,
+          pitch: 70,
+          duration: 8000
+      },
       'location-library': {
-        center: [-76.090473, 43.048480],
+          center: [-76.090473, 43.048480],
           zoom: 16,
           bearing: 0,
           pitch: 20,
           duration: 4000
       },
-      'location-home': {
+      'location-fayette': {
           center: [-76.104681, 43.048329],
+          zoom: 16,
+          bearing: 0,
+          pitch: 20,
+          duration: 4000
+      },
+      'location-cumberland': {
+          center: [-76.112881, 43.028337],
           zoom: 16,
           bearing: 0,
           pitch: 20,
