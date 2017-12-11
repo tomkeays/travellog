@@ -26,6 +26,8 @@
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
   <!-- Metatags -->
   <meta property="og:title" content="Travel Log" />
   <meta property="og:url" content="your_url_here" />
@@ -50,6 +52,32 @@
   <!-- All our css -->
   <link href="stylesheets/mapglyphs.css" rel="stylesheet">
   <link href="stylesheets/screen.css" rel="stylesheet">
+  <style>
+    .marker {
+      background-image: url('images/icons/marker.png');
+      background-size: cover;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .mapboxgl-popup {
+      max-width: 200px;
+    }
+    .mapboxgl-popup-content {
+      text-align: center;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .mapboxgl-popup-content h3 {
+      font-size: .7rem;
+      padding: 0;
+      margin: 0 0 .3rem 0;
+    }
+    .mapboxgl-popup-content p {
+      font-size: .6rem;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
 
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -71,12 +99,12 @@
       </section>
 
       <div class="section">
-        <i class="mg map-us-pa"></i>
-        <h2>Pennsylvania</h2>
+        <i class="mg map-us-ny"></i>
+        <h2>New York</h2>
       </div>
 
-      <section id='location-one'>
-        <h3>Location One</h3>
+      <section id='location-library'>
+        <h3>Library</h3>
         <p>This place was pretty great.</p>
         <span class="date">Jan 1</span>
 
@@ -94,8 +122,8 @@
 
       </section>
 
-      <section id='location-two'>
-        <h3>Location Two</h3>
+      <section id='location-home'>
+        <h3>Home</h3>
         <p>But this place was even better.</p>
         <span class="date">Jan 16</span>
 
@@ -132,36 +160,80 @@
 
   <!-- Here's where we give the map all of its settings and locations -->
   <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoidG9ta2VheXMiLCJhIjoiY2phdWRjanppNThwNTMzcGwydzlzaDN3YSJ9.SyVdgmM6cPn42x2l3-UQpQ'; // Add your mapbox API key here
+    // Add your mapbox API key here
+    mapboxgl.accessToken = 'pk.eyJ1IjoidG9ta2VheXMiLCJhIjoiY2phdWRjanppNThwNTMzcGwydzlzaDN3YSJ9.SyVdgmM6cPn42x2l3-UQpQ';
 
     var map = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/outdoors-v9',
-      center: [-75.401710, 41.221494], // your starting coordiantes
-      zoom: 12.5,
-      bearing: 35,
-      pitch: 40,
+      style: 'mapbox://styles/mapbox/streets-v9',
+      // your starting coordiantes
+      center: [-76.104681, 43.048329],
+      zoom: 11,
+      bearing: 55,
+      pitch: 70,
       duration: 8000
     });
 
+    var nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-left');
+    //map.addControl(new mapboxgl.FullscreenControl());
     map.scrollZoom.disable();
 
-    var chapters = {
-
-      // give each location the same name as its section id, and set its coordinates here
-      'location-one': {
-        center: [-75.401710, 41.221494],
-          zoom: 12.5,
-          bearing: 35,
-          pitch: 40,
-          duration: 8000
+    var geojson = {
+      type: 'FeatureCollection',
+      features: [{
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [-76.090473, 43.048480]
+        },
+        properties: {
+          title: 'Library',
+          description: 'Falcone Library'
+        }
       },
-      'location-two': {
-          center: [-75.748217, 40.740883],
-          zoom: 11,
-          bearing: 55,
-          pitch: 70,
-          duration: 8000
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [-76.104681, 43.048329]
+        },
+        properties: {
+          title: 'Home',
+          description: 'Fayette St'
+        }
+      }]
+    };
+
+    geojson.features.forEach(function(marker) {
+
+      // create a HTML element for each feature
+      var el = document.createElement('div');
+      el.className = 'marker';
+
+      // make a marker for each feature and add to the map
+      new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+        .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.description + '</p>'))
+        .addTo(map);
+    });
+
+    var chapters = {
+      // give each location the same name as its section id, and set its coordinates here
+      'location-library': {
+        center: [-76.090473, 43.048480],
+          zoom: 16,
+          bearing: 0,
+          pitch: 20,
+          duration: 4000
+      },
+      'location-home': {
+          center: [-76.104681, 43.048329],
+          zoom: 16,
+          bearing: 0,
+          pitch: 20,
+          duration: 4000
       }
   };
 
